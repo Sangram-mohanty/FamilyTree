@@ -41,6 +41,7 @@ button { cursor: pointer; }
 .profile-avatar, .avatar-button { width: 31px; height: 31px; font-size: 11px; }
 .profile-row > span:last-child { display: flex; flex-direction: column; gap: 3px; }
 .main-content { min-width: 0; flex: 1; }
+.app-footer { padding: 14px 30px; border-top: 1px solid #ecece7; color: #969d95; font-size: 10px; text-align: center; }
 .topbar { height: 68px; padding: 0 45px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid #ecece7; background: rgba(255,255,255,.55); }
 .breadcrumbs { display: flex; gap: 10px; align-items: center; color: #a0a49d; font-size: 10px; }
 .breadcrumbs strong { color: #59665c; font-weight: 600; }

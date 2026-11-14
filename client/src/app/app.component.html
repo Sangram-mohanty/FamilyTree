@@ -137,7 +137,7 @@
             </div>
           </div>
           @if (view === 'graph') {
-            <app-family-graph [people]="people" [links]="relationships" [partners]="partnerships" [selectedId]="selectedPerson?._id ?? null"
+            <app-family-graph [family]="selectedTree" [people]="people" [links]="relationships" [partners]="partnerships" [selectedId]="selectedPerson?._id ?? null"
               [title]="selectedTree.surname + ' family'" [subtitle]="'of ' + familyLocation(selectedTree)"
               [photoUrl]="photoUrlFn" (personSelected)="openFromGraph($event)" />
             <p class="graph-tip">Click anyone to open their branch, where you can add a father, mother, sibling, or child.</p>
@@ -264,6 +264,7 @@
         }
       </section>
     }
+    <footer class="app-footer">Created by Sangram Mohanty</footer>
   </main>
 </div>
 
