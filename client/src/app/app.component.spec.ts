@@ -29,6 +29,7 @@ describe('AppComponent', () => {
     expect(fixture.componentInstance).toBeTruthy();
     expect(fixture.nativeElement.textContent).toContain('Every family has');
     expect(fixture.nativeElement.textContent).toContain('Create your family tree');
+    expect(fixture.nativeElement.querySelector('.app-footer')?.textContent).toContain('Created by Sangram Mohanty');
   });
 
   describe('family member helpers', () => {

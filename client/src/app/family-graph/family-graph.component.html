@@ -5,8 +5,11 @@
     <span>{{ (scale * 100).toFixed(0) }}%</span>
     <button type="button" (click)="zoomIn()" aria-label="Zoom in">+</button>
     <button type="button" class="fit-button" (click)="fit()">Fit</button>
+    <button type="button" class="download-button" [disabled]="!family || !people.length || downloading"
+      (click)="downloadPdf()" aria-label="Download family graph as PDF">{{ downloading ? 'Creating PDF…' : 'Download PDF' }}</button>
   </div>
 </div>
+@if (downloadError) { <p class="graph-summary" role="alert">{{ downloadError }}</p> }
 
 <div class="parchment" #viewport>
   <header class="parchment-header">
