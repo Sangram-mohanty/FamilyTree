@@ -1,23 +1,3 @@
-# FROM node:20-alpine
-#
-# WORKDIR /app
-#
-# ENV NODE_ENV=production
-#
-# # Install ONLY production dependencies
-# COPY package*.json ./
-# RUN npm ci --omit=dev
-#
-# # Copy application code
-# COPY . .
-#
-# # Run as non-root user for security
-# USER node
-#
-# EXPOSE 3000
-#
-# CMD ["node", "server.js"]
-
 FROM node:26.13.1-alpine
 
 WORKDIR /app
