@@ -4,8 +4,9 @@ on:
   push:
     branches:
       - aws
+  workflow_dispatch:
 
-# permission can be added at job level or workflow level
+# permission can be added at job level or workflow level: testing
 permissions:
   id-token: write   # This is required for requesting the JWT
   contents: read    # This is required for actions/checkout
@@ -16,6 +17,11 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
+
+      - name: Debug OIDC Token Claims
+        run: |
+          TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$ACTIONS_ID_TOKEN_REQUEST_URL&audience=://amazonaws.com" | jq -r '.value')
+          echo $TOKEN | cut -d '.' -f 2 | base64 -d 2>/dev/null | jq '{sub, aud, iss}'
 
       - name: Configure AWS credentials via OIDC
         uses: aws-actions/configure-aws-credentials@v4
