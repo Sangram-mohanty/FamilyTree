@@ -3,7 +3,14 @@ services:
     image: ${BACKEND_REPO}:latest
     container_name: express-backend
     env_file:
-      - ./server/.env
+      - .env
+    # environment:
+    #   - PORT=${PORT}
+    #   - MONGODB_URI=${MONGODB_URI}
+    #   - CLIENT_ORIGIN=${CLIENT_ORIGIN}
+    #   - UPLOAD_DIR=${UPLOAD_DIR}
+    #   - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+    #   - ADMIN_TOKEN_SECRET=${ADMIN_TOKEN_SECRET}
     expose:
       - "3000"
     mem_limit: 350m
