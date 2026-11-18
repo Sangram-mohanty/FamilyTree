@@ -39,8 +39,8 @@ jobs:
           docker push ${{ secrets.ECR_BACKEND_REPO }}:latest
 
       - name: Build and push frontend image
-        env:
-          FRONTEND_REPO: ${{ secrets.ECR_FRONTEND_REPO }}
+        # env:
+        #   FRONTEND_REPO: ${{ secrets.ECR_FRONTEND_REPO }}
         run: |
           docker build -t ${{ secrets.ECR_FRONTEND_REPO }}:latest ./client
           docker push ${{ secrets.ECR_FRONTEND_REPO }}:latest
