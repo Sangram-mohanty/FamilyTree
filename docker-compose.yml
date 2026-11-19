@@ -22,7 +22,7 @@
 
 services:
   backend:
-    image: ${{BACKEND_REPO}}
+    image: ${BACKEND_REPO}:latest
     container_name: express-backend
     env_file:
       - .env
@@ -32,7 +32,7 @@ services:
     restart: unless-stopped
 
   frontend:
-    image: ${{FRONTEND_REPO}}
+    image: ${FRONTEND_REPO}:latest
     container_name: angular-frontend
     ports:
       - "80:80"
