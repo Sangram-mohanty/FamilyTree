@@ -30,7 +30,7 @@ jobs:
           aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Login to Amazon ECR
-        id: login-ecr
+        # id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
 
       - name: Build and push backend image
@@ -93,34 +93,3 @@ jobs:
             docker compose pull
             docker compose up -d
             docker image prune -f
-          # script: |
-          #   export PATH=$PATH:/usr/local/bin
-          #   cd /home/ubuntu/app
-          #   aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${{ secrets.ECR_BACKEND_REPO }}
-          #   BACKEND_REPO=${{ secrets.ECR_BACKEND_REPO }} FRONTEND_REPO=${{ secrets.ECR_FRONTEND_REPO }} docker compose pull
-          #   BACKEND_REPO=${{ secrets.ECR_BACKEND_REPO }} FRONTEND_REPO=${{ secrets.ECR_FRONTEND_REPO }} docker compose up -d
-
-      # - name: Copy docker-compose.yml to EC2
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ${{ secrets.EC2_USER }}
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     source: "docker-compose.yml"
-      #     target: "/home/ubuntu/app"
-
-      # - name: Pull and restart containers on EC2
-      #   uses: appleboy/ssh-action@v1.0.3
-      #   with:
-      #     host: ${{ secrets.EC2_HOST }}
-      #     username: ${{ secrets.EC2_USER }}
-      #     key: ${{ secrets.EC2_SSH_KEY }}
-      #     script: |
-      #       cd /home/ubuntu/app
-      #       aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | docker login --username AWS --password-stdin ${{ steps.login-ecr.outputs.registry }}
-      #       export ECR_REGISTRY=${{ steps.login-ecr.outputs.registry }}
-      #       export FRONTEND_REPO=${{ secrets.ECR_FRONTEND_REPO }}
-      #       export BACKEND_REPO=${{ secrets.ECR_BACKEND_REPO }}
-      #       docker compose pull
-      #       docker compose up -d --remove-orphans
-      #       docker image prune -f
