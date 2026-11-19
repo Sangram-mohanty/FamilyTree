@@ -22,17 +22,17 @@
 
 services:
   backend:
-    build: ./server
+    image: ${{BACKEND_REPO}}
     container_name: express-backend
     env_file:
-      - ./server/.env
+      - .env
     expose:
       - "3000"
     mem_limit: 350m
     restart: unless-stopped
 
   frontend:
-    build: ./client
+    image: ${{FRONTEND_REPO}}
     container_name: angular-frontend
     ports:
       - "80:80"
