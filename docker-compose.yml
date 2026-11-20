@@ -16,12 +16,12 @@ services:
     mem_limit: 350m
     restart: unless-stopped
 
-  frontend:
-    image: ${FRONTEND_REPO}:latest
-    container_name: angular-frontend
-    ports:
-      - "80:80"
-    depends_on:
-      - backend
-    mem_limit: 128m
-    restart: unless-stopped
+  # frontend:
+  #   image: ${FRONTEND_REPO}:latest
+  #   container_name: angular-frontend
+  #   ports:
+  #     - "80:80"
+  #   depends_on:
+  #     - backend
+  #   mem_limit: 128m
+  #   restart: unless-stopped
