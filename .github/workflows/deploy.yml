@@ -45,12 +45,15 @@ jobs:
           cache: 'npm'
 
       - name: Install dependencies
+        working-directory: ./client
         run: npm ci
 
       - name: Build Angular app
+        working-directory: ./client
         run: npm ng build --configuration=production --source-map=false
 
       - name: Deploy to S3
+        working-directory: ./client
         run: |
           aws s3 sync dist/family-tree/browser s3://familytree-frontend --delete
 
