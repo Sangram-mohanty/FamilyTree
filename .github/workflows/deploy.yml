@@ -3,7 +3,7 @@ name: Angular + Express via Docker Compose
 on:
   push:
     branches:
-      - aws
+      - aws-mahesh
   workflow_dispatch:
 
 # permission can be added at job level or workflow level: testing
@@ -38,12 +38,21 @@ jobs:
           docker build -t ${{ secrets.ECR_BACKEND_REPO }}:latest ./server
           docker push ${{ secrets.ECR_BACKEND_REPO }}:latest
 
-      - name: Build and push frontend image
-        # env:
-        #   FRONTEND_REPO: ${{ secrets.ECR_FRONTEND_REPO }}
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build Angular app
+        run: npm ng build --configuration=production --source-map=false
+
+      - name: Deploy to S3
         run: |
-          docker build -t ${{ secrets.ECR_FRONTEND_REPO }}:latest ./client
-          docker push ${{ secrets.ECR_FRONTEND_REPO }}:latest
+          aws s3 sync dist/family-tree/browser s3://familytree-frontend --delete
 
       - name: Copy docker-compose.yml to EC2
         uses: appleboy/scp-action@v0.1.7
