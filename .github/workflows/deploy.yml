@@ -56,7 +56,7 @@ jobs:
       - name: Deploy to S3
         working-directory: ./client
         run: |
-          aws s3 sync dist/family-tree/browser s3://familytree-frontend --delete
+          aws s3 sync dist/family-tree/browser s3://familytree-frontend-965239086311-ap-south-1-an --delete
 
       - name: Copy docker-compose.yml to EC2
         uses: appleboy/scp-action@v0.1.7
