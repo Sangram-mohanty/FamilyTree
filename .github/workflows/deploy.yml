@@ -51,7 +51,7 @@ jobs:
 
       - name: Build Angular app
         working-directory: ./client
-        run: npm ng build --configuration=production --source-map=false
+        run: npx ng build --configuration=production --source-map=false
 
       - name: Deploy to S3
         working-directory: ./client
