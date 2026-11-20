@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, forkJoin, map } from 'rxjs';
 import { AdminService } from './admin.service';
+import { environment } from '../environments/environment';
 
 export interface FamilyTree {
   _id: string;
@@ -52,7 +53,8 @@ export interface PersonRelatives {
 
 @Injectable({ providedIn: 'root' })
 export class FamilyService {
-  private readonly apiUrl = '/api/v1';
+  // private readonly apiUrl = '/api/v1';
+  private readonly apiUrl = `${environment.apiUrl}/api/v1`;
 
   constructor(private readonly http: HttpClient, private readonly admin: AdminService) {}
 

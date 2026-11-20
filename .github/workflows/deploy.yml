@@ -49,6 +49,15 @@ jobs:
         working-directory: ./client
         run: npm ci
 
+      - name: Generate production environment.ts
+        working-directory: ./client
+        run: |
+          cat <<EOF > src/environments/environment.ts
+          export const environment = {
+            apiUrl: 'http://${{ secrets.EC2_HOST }}:3000'
+          };
+          EOF
+
       - name: Build Angular app
         working-directory: ./client
         run: npx ng build --configuration=production --source-map=false

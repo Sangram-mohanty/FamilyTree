@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, catchError, map, of, tap } from 'rxjs';
+import { environment } from '../environments/environment';
 
 const STORAGE_KEY = 'roots-admin-token';
 
@@ -10,7 +11,8 @@ const STORAGE_KEY = 'roots-admin-token';
  */
 @Injectable({ providedIn: 'root' })
 export class AdminService {
-  private readonly apiUrl = '/api/v1/admin';
+  // private readonly apiUrl = '/api/v1/admin';
+  private readonly apiUrl = `${environment.apiUrl}/api/v1/admin`;
   private token = '';
 
   constructor(private readonly http: HttpClient) {
