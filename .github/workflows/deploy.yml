@@ -2,8 +2,8 @@ name: Angular + Express via Docker Compose
 
 on: 
   push: 
-   branches:
-     - docker_work 
+    branches:
+      - docker_work 
   workflow_dispatch:
 
   # permission can be added at job level or workflow level: testing
@@ -13,8 +13,8 @@ permissions:
 
 jobs:
    deploy:
-   runs-on: ubuntu-latest
-   steps:
+    runs-on: ubuntu-latest
+    steps:
         - name: Checkout code
           uses: actions/checkout@v4
 
