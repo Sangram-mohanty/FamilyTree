@@ -1,0 +1,84 @@
+name: Angular + Express via Docker Compose
+on: 
+ push:  
+  branches:
+  - docker_work  workflow_dispatch:
+  # permission can be added at job level or workflow level: testing
+  permissions:
+   id-token: write   # This is required for requesting the JWT 
+  contents: read                 # This is required for actions/checkout
+  jobs:
+   deploy:
+   runs-on: ubuntu-latest
+   steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Configure AWS credentials via OIDC
+          uses: aws-actions/configure-aws-credentials@v4
+          with:
+            role-to-assume: ${{ secrets.AWS_ROLE_ARN }} 
+            aws-region: ${{ secrets.AWS_REGION }}
+
+        - name: Login to Amazon ECR
+          uses: aws-actions/amazon-ecr-login@v2
+
+        - name: Build and push backend image 
+          run: | 
+           docker build -t ${{ secrets.ECR_BACKEND_REPO }}:latest ./server
+           docker push ${{ secrets.ECR_BACKEND_REPO }}:latest
+
+        - name: Build and push frontend image
+          run: |
+           docker build -t ${{ secrets.ECR_FRONTEND_REPO }}:latest ./client 
+           docker push ${{ secrets.ECR_FRONTEND_REPO }}:latest
+
+        - name: Copy docker-compose.yml to EC2
+          uses: appleboy/scp-action@v0.1.7 
+          with: 
+            host: ${{ secrets.EC2_HOST }}
+            username: ${{ secrets.EC2_USER }} 
+            key: ${{ secrets.EC2_SSH_KEY }} 
+            source: "docker-compose.yml"
+            target: "/home/ubuntu/app"
+
+        - name: Create .env file on EC2
+          uses: appleboy/ssh-action@v1.0.3 
+          env:
+              PORT: ${{ secrets.PORT }}
+              MONGODB_URI: ${{ secrets.MONGODB_URI }}
+              CLIENT_ORIGIN: ${{ secrets.CLIENT_ORIGIN }}
+              UPLOAD_DIR: ${{ secrets.UPLOAD_DIR }} 
+              ADMIN_PASSWORD: ${{ secrets.ADMIN_PASSWORD }} 
+              ADMIN_TOKEN_SECRET: ${{ secrets.ADMIN_TOKEN_SECRET }} 
+          with: 
+              host: ${{ secrets.EC2_HOST }} 
+              username: ${{ secrets.EC2_USER }} 
+              key: ${{ secrets.EC2_SSH_KEY }}
+              envs: PORT,MONGODB_URI,CLIENT_ORIGIN,UPLOAD_DIR,ADMIN_PASSWORD,ADMIN_TOKEN_SECRET 
+              script: | 
+                cat <<EOF > /home/ubuntu/app/.env 
+                BACKEND_REPO=${{ secrets.ECR_BACKEND_REPO }} 
+                FRONTEND_REPO=${{ secrets.ECR_FRONTEND_REPO }} 
+                PORT=$PORT 
+                MONGODB_URI=$MONGODB_URI 
+                CLIENT_ORIGIN=$CLIENT_ORIGIN 
+                UPLOAD_DIR=$UPLOAD_DIR 
+                ADMIN_PASSWORD=$ADMIN_PASSWORD 
+                ADMIN_TOKEN_SECRET=$ADMIN_TOKEN_SECRET 
+                EOF
+
+        - name: Pull images and start containers on EC2 
+          uses: appleboy/ssh-action@v1.0.3 
+          with: 
+            host: ${{ secrets.EC2_HOST }} 
+            username: ${{ secrets.EC2_USER }} 
+            key: ${{ secrets.EC2_SSH_KEY }} 
+            script: | 
+                 export PATH=$PATH:/usr/local/bin 
+                 cd /home/ubuntu/app 
+                 aws ecr get-login-password --region ${{ secrets.AWS_REGION }} | 
+                 docker login --username AWS --password-stdin ${{ secrets.ECR_BACKEND_REPO }} 
+                 docker compose pull 
+                 docker compose up -d 
+                 docker image prune -f
