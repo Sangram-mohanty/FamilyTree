@@ -4,7 +4,7 @@ const multer = require('multer');
 const path = require('node:path');
 const treeRoutes = require('./routes/trees');
 const admin = require('./auth/admin');
-
+ 
 const app = express();
 const uploadDirectory = path.resolve(process.env.UPLOAD_DIR || 'uploads');
 
